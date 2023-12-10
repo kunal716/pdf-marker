@@ -28,7 +28,25 @@ def filter_header_footer(all_page_blocks, max_selected_lines=2):
 
     bad_span_ids = filter_common_elements(first_lines, len(all_page_blocks))
     bad_span_ids += filter_common_elements(last_lines, len(all_page_blocks))
-    return bad_span_ids
+
+    # Extract page numbers from last lines (assumed to be footers)
+    footer_page_numbers = extract_page_numbers(last_lines)
+
+    return bad_span_ids, footer_page_numbers
+
+
+def extract_page_numbers(lines):
+    # Add your code here to extract page numbers from the lines
+    # You may use regular expressions or other techniques depending on the structure of the page numbers
+    page_numbers = []
+
+    # Example: Extract page numbers using a simple regex
+    for line in lines:
+        match = re.search(r'\b(\d+)\b', line.text)
+        if match:
+            page_numbers.append(int(match.group(1)))
+
+    return page_numbers
 
 
 def categorize_blocks(all_page_blocks: List[Page]):
@@ -103,7 +121,3 @@ def filter_common_titles(merged_blocks: List[FullyMergedBlock]) -> List[FullyMer
         new_blocks.append(block)
 
     return new_blocks
-
-
-
-
